@@ -101,7 +101,6 @@ toc = time.perf_counter()     # stop timer
 
 
 
-#if __name__ == '__main__':
-#print(f"The calculation took {toc - tic: 0.4f} seconds")
- #   main()
+
+print(f"The calculation took {toc - tic: 0.4f} seconds")
 logging.info('Program stop')
