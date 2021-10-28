@@ -13,7 +13,7 @@
 # pip install pandas
 # pip install openpyxl
 import logging
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 import time  # timer
 tic = time.perf_counter()  # start timer
@@ -22,51 +22,7 @@ logging.info('program start')
 import requests
 from bs4 import BeautifulSoup
 
-# Подключаем библиотеки
-#import httplib2
-#import apiclient.discovery
-#from oauth2client.service_account import ServiceAccountCredentials
 
-#CREDENTIALS_FILE = 'C:/Users/Juli/PycharmProjects/from-pycharm-lerning-f445c7cbaff0.json'  # ключ
-
-# Читаем ключи из файла
-#credentials = ServiceAccountCredentials.from_json_keyfile_name(CREDENTIALS_FILE, ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'])
-
-#httpAuth = credentials.authorize(httplib2.Http()) # Авторизуемся в системе
-#service = apiclient.discovery.build('sheets', 'v4', http = httpAuth) # Выбираем работу с таблицами и 4 версию API
-
-#spreadsheet = service.spreadsheets().create(body = {
- #   'properties': {'title': 'второй тестовый документ', 'locale': 'ru_RU'},
- #   'sheets': [{'properties': {'sheetType': 'GRID',
-  #                             'sheetId': 0,
-  #                             'title': 'Лист номер один',
-  #                             'gridProperties': {'rowCount': 100, 'columnCount': 15}}}]
-#}).execute()
-#spreadsheetId = spreadsheet['spreadsheetId'] # сохраняем идентификатор файла
-
-#driveService = apiclient.discovery.build('drive', 'v3', http = httpAuth) # Выбираем работу с Google Drive и 3 версию API
-#access = driveService.permissions().create(
- #   fileId = spreadsheetId,
- #   body = {'type': 'user', 'role': 'writer', 'emailAddress': 'burash.fm@gmail.com'},  # Открываем доступ на редактирование
- #   fields = 'id'
-#).execute()
-
-#indexSheet = 'https://docs.google.com/spreadsheets/d/1gkUz2oyHcVZk6oFegSWWf1EBLWwvlZwaJOqOub6JpcA/edit'
-#results = service.spreadsheets().values().batchUpdate(spreadsheetId = indexSheet, body = {
- #   "valueInputOption": "USER_ENTERED", # Данные воспринимаются, как вводимые пользователем (считается значение формул)
- #   "data": [
-  #      {"range": "Лист номер один!B2:D5",
-  #       "majorDimension": "ROWS",     # Сначала заполнять строки, затем столбцы
-   #      "values": [
-   ##                 ['25', "=6*6", "=sin(3,14/2)"]  # Заполняем вторую строку
-    #               ]}
-  #  ]
-#}).execute()
-
-
-
-
-#Trying to set up a parser and soup
 
 import openpyxl
 file = ("C:\\Users\\Juli\\Documents\\GitHub\\simple_stock_3\\trying\\settt.xlsx")
@@ -78,14 +34,14 @@ for i in range(1,99):
     if value is not None:
         values.append(value)
 
-print(values)
+logging.info(values)
 LN = len(values)
 tikets = []
 for i in range(LN):
     tikets.append(str(values[i]))
 
 price = []
-
+price2 = ['0']  #подвечер не придумал как учесть начало итерации с нуля. поэтому костыль. прсто нулевая итерация равна нулю
 for i in range(LN):
     x = tikets[i] #tiket
     url = ("https://smart-lab.ru/forum/" + x)
@@ -96,12 +52,16 @@ for i in range(LN):
     for item in MSK_trd:
         price += ((item.text).split())
 
+lnp=len(price)
+for i in range(lnp):
+    if i % 2 == 0:
+        price2.append(price[i])
 
-print(price) # returns the ticket price
+logging.info(price2) # returns the ticket price
 worksheet = wb['Лист1']
 for i in range(LN):
-    if i % 2 == 0:
-        #???? как вызвать персчет координат в цикле
+    if i != 0:
+        worksheet['B'+ str(i)] = price2[i]
 wb.save("C:\\Users\\Juli\\Documents\\GitHub\\simple_stock_3\\trying\\settt.xlsx") #Сохраняем измененный файл
 
 #class Stocks:
